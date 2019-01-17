@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "606125948531",
+    "firebase_url": "https://capstone-on-the-move.firebaseio.com",
+    "project_id": "capstone-on-the-move",
+    "storage_bucket": "capstone-on-the-move.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:606125948531:android:05081f4549ddc74c",
+        "android_client_info": {
+          "package_name": "com.mafdy.onthemove"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "606125948531-4582j6qlro76g8138i3v47atg3uotml4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mafdy.onthemove",
+            "certificate_hash": "20b825a888d131d3e34e1a6d7ecf7c373e613f54"
+          }
+        },
+        {
+          "client_id": "606125948531-oh2leej8g1rkjdq08fu5mv47r02g8tbe.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmQky4JTn5rwVKeGF-uvBQdHH_8FUdodU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "606125948531-oh2leej8g1rkjdq08fu5mv47r02g8tbe.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
