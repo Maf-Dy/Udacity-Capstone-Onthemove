@@ -3,6 +3,7 @@ package com.mafdy.onthemove;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
+import android.app.SearchManager;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
@@ -34,6 +35,9 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.CompoundButton;
@@ -245,9 +249,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             setSwitchBottomSheet(bottomSheet);
         }
 
-        searchbar = (SearchView) findViewById(R.id.toolbar);
+        //searchbar = (SearchView) findViewById(R.id.toolbar);
 
-        searchbar.setIconified(true);
+       /* searchbar.setIconified(true);
         searchbar.setQueryHint("Search for Place");
         searchbar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -297,7 +301,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 }
             }
-        });
+        });*/
 
 
         mStatusViewModel.getLatestStatus().observe(this, new Observer<Status>() {
@@ -381,6 +385,83 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     static Bundle mSavedInstanceState = null;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+
+        SearchManager manager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+
+        searchbar = (SearchView) menu.findItem(R.id.app_bar_search).getActionView();
+
+        searchbar.setIconified(true);
+        searchbar.setQueryHint("Search for Place");
+        searchbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent =
+                        null;
+                try {
+                    intent = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_OVERLAY)
+                            .build(MainActivity.this);
+
+                    startActivityForResult(intent, AUTO_COMP_REQ_CODE);
+                } catch (GooglePlayServicesRepairableException e) {
+                    e.printStackTrace();
+                    Crashlytics.logException(e);
+                    Utils.displayAlertDialog1(MainActivity.this, getText(R.string.googleplayserviceserror_java_mainactivity).toString(), getText(R.string.googleservices_wontfunctionproperly_java_mainactivity).toString() + e.getConnectionStatusCode());
+
+                } catch (GooglePlayServicesNotAvailableException e) {
+                    e.printStackTrace();
+                    Crashlytics.logException(e);
+                    Utils.displayAlertDialog1(MainActivity.this, getText(R.string.googleplayserviceserror_java_mainactivity).toString(), getText(R.string.googleservicesnotavailable_java_mainactivity).toString() + e.errorCode);
+
+
+                }
+
+            }
+        });
+        searchbar.setOnSearchClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent =
+                        null;
+                try {
+                    intent = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_OVERLAY)
+                            .build(MainActivity.this);
+
+                    startActivityForResult(intent, AUTO_COMP_REQ_CODE);
+                } catch (GooglePlayServicesRepairableException e) {
+                    e.printStackTrace();
+                    Crashlytics.logException(e);
+                    Utils.displayAlertDialog1(MainActivity.this, "Google Play Services Error", "Google Play Services Error, the app won't function properly, check that it is installed, enabled and updated, connection status code: " + e.getConnectionStatusCode());
+
+                } catch (GooglePlayServicesNotAvailableException e) {
+                    e.printStackTrace();
+                    Crashlytics.logException(e);
+                    Utils.displayAlertDialog1(MainActivity.this, "Google Play Services Error", "Google Play Services not available, the app won't function properly, error code: " + e.errorCode);
+
+
+                }
+            }
+        });
+
+        return super.onCreateOptionsMenu(menu);
+
+
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     protected void onNewIntent(Intent intent) {

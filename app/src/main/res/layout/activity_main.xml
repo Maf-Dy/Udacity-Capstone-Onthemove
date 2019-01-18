@@ -27,7 +27,7 @@
                     android:padding="15dp"
                     >
 
-                    <SearchView
+                 <!--   <SearchView
                         android:id="@+id/toolbar"
                         android:layout_width="match_parent"
                         android:layout_height="?attr/actionBarSize"
@@ -35,7 +35,7 @@
                         android:minHeight="?attr/actionBarSize"
 
                         app:layout_collapseMode="pin"
-                        ></SearchView>
+                        ></SearchView> -->
 
                 </android.support.design.widget.AppBarLayout>
 
