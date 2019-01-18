@@ -31,7 +31,6 @@ public class Application extends android.app.Application {
 
         }
 
-        MobileAds.initialize(this, "ca-app-pub-7437193771461924~3939916689");
 
 
     }

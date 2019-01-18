@@ -7,23 +7,23 @@
     <string name="appwidget_text">Latest Status will appear here</string>
     <string name="add_widget">Add widget</string>
 
-    <string name="share_mainactivity">Share</string>
-    <string name="share_history">Share History</string>
-    <string name="share_current">Share Current</string>
-    <string name="Share_History">Share History</string>
-    <string name="Share_current">Share Current</string>
-    <string name="no_status_yet">No status yet</string>
-    <string name="destination">Destination</string>
-    <string name="share">Share</string>
-    <string name="from">From</string>
-    <string name="to">To</string>
+    <string name="share_mainactivity"> Share </string>
+    <string name="share_history"> Share History </string>
+    <string name="share_current"> Share Current</string>
+    <string name="Share_History"> Share History</string>
+    <string name="Share_current"> Share Current</string>
+    <string name="no_status_yet"> No status yet</string>
+    <string name="destination"> Destination</string>
+    <string name="share"> Share</string>
+    <string name="from"> From</string>
+    <string name="to"> To</string>
     <string name="on_the_move">On the Move</string>
-    <string name="user_s_current_activity_walking_or_still_or_driving">User\'s Current Activity, walking or still or driving</string>
-    <string name="destination_imageview">Destination, optionally it can be set by the user</string>
-    <string name="Share_imageview">Share option to open share page for sharing current status OR viewing History</string>
-    <string name="shareactivity_imageview">share button, tap to share either current latest status OR the selected history using from and to date time selectors</string>
-    <string name="imageview_useractivity">user activity ( Still, walking )</string>
-    <string name="fab_contentdescription">Go to location button, use it to go to navigate the map to the latest status update</string>
+    <string name="user_s_current_activity_walking_or_still_or_driving"> User\'s Current Activity, walking or still or driving</string>
+    <string name="destination_imageview"> Destination, optionally it can be set by the user</string>
+    <string name="Share_imageview"> Share option to open share page for sharing current status OR viewing History</string>
+    <string name="shareactivity_imageview"> share button, tap to share either current latest status OR the selected history using from and to date time selectors</string>
+    <string name="imageview_useractivity"> user activity ( Still, walking )</string>
+    <string name="fab_contentdescription"> Go to location button, use it to go to navigate the map to the latest status update</string>
     <string name="accurate_to_java_adapter"> accurate to: </string>
     <string name="at_java_adapter"> at </string>
     <string name="activity_java_mainactivity"> Activity: </string>
@@ -31,17 +31,17 @@
     <string name="address_java_mainactivity"> Address: </string>
     <string name="notfound_java_mainactivity">Not Found</string>
     <string name="destination_java_mainactivity"> Destination: </string>
-    <string name="destinationnotset_java_mainactivity">Destination: not set</string>
+    <string name="destinationnotset_java_mainactivity"> Destination: not set</string>
     <string name="currently_java_service"> Currently </string>
     <string name="time_java_service"> Time: </string>
     <string name="taptosharenow_java_service"> Tap to Share now </string>
-    <string name="pleaseallowpermissions_java_mainactivity">Please allow the permissions for the app to function properly</string>
-    <string name="destinationset_java_mainactivity">Done. saving destination for the next status update</string>
+    <string name="pleaseallowpermissions_java_mainactivity"> Please allow the permissions for the app to function properly</string>
+    <string name="destinationset_java_mainactivity"> Done. saving destination for the next status update</string>
     <string name="googleplayserviceserror_java_mainactivity">Google Play Services Error</string>
     <string name="googleservicesnotavailable_java_mainactivity">Google Play Services not available, the app won\'t function properly, error code:</string>
     <string name="googleservices_wontfunctionproperly_java_mainactivity">Google Play Services Error, the app won\'t function properly, check that it is installed, enabled and updated, connection status code:</string>
-    <string name="deletehistory_java_mainactivity">Delete history</string>
-    <string name="deletehistory_areusure_java_mainactivity">Are you sure?</string>
+    <string name="deletehistory_java_mainactivity"> Delete history</string>
+    <string name="deletehistory_areusure_java_mainactivity"> Are you sure?</string>
 
 
 </resources>

@@ -51,6 +51,13 @@ import android.widget.Toast;
 import com.amalbit.trail.RouteOverlayView;
 import com.amalbit.trail.TrailSupportMapFragment;
 import com.crashlytics.android.Crashlytics;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.reward.RewardItem;
+import com.google.android.gms.ads.reward.RewardedVideoAd;
+import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 import com.google.android.gms.awareness.Awareness;
 import com.google.android.gms.awareness.SnapshotClient;
 import com.google.android.gms.awareness.snapshot.DetectedActivityResponse;
@@ -142,6 +149,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     ImageButton mDeleteWithFromTo;
     SearchView searchbar;
+    private InterstitialAd mInterstitialAd;
+    private RewardedVideoAd mRewardedVideoAd;
 
 
     @Override
@@ -311,7 +320,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                     SimpleDateFormat n = new SimpleDateFormat("hh:mm:ss aa , dd-MM-yyyy");
 
-                    textView_info.setText(getText(R.string.activity_java_mainactivity) + status.getActivity() + "\n" + getText(R.string.time_java_mainactivity) + n.format(status.getDatetime().getTime()) + "\n" + getText(R.string.address_java_mainactivity) + (status.getLocationaddress() == null || status.getLocationaddress().equals("null") ? getText(R.string.notfound_java_mainactivity) : status.getLocationaddress()));
+                    textView_info.setText(" " + getText(R.string.activity_java_mainactivity) + " " + status.getActivity() + "\n" + getText(R.string.time_java_mainactivity) + " " + n.format(status.getDatetime().getTime()) + "\n" + getText(R.string.address_java_mainactivity) + (status.getLocationaddress() == null || status.getLocationaddress().equals("null") ? getText(R.string.notfound_java_mainactivity) : status.getLocationaddress()));
 
 
                     updateUIafterStatus(status);
@@ -328,7 +337,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                     if (status.getDestinationname() != null) {
                         if (!status.getDestinationname().equals("")) {
-                            textView_destination.setText(getText(R.string.destination_java_mainactivity) + status.getDestinationname());
+                            textView_destination.setText(getText(R.string.destination_java_mainactivity) + " " + status.getDestinationname());
                         } else {
                             textView_destination.setText(R.string.destinationnotset_java_mainactivity);
                         }
@@ -381,6 +390,95 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         }
 
+        MobileAds.initialize(this, "ca-app-pub-7437193771461924~3939916689");
+
+
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId("ca-app-pub-7437193771461924/8042813222");
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                // Code to be executed when an ad finishes loading.
+                mInterstitialAd.show();
+                Timber.v("adloaded");
+            }
+
+            @Override
+            public void onAdFailedToLoad(int errorCode) {
+                // Code to be executed when an ad request fails.
+                Timber.v("ad failed to load " + errorCode);
+
+            }
+
+            @Override
+            public void onAdOpened() {
+                // Code to be executed when the ad is displayed.
+                Timber.v("adopened");
+
+            }
+
+            @Override
+            public void onAdLeftApplication() {
+                // Code to be executed when the user has left the app.
+                Timber.v("adleftapplication");
+            }
+
+            @Override
+            public void onAdClosed() {
+                // Code to be executed when when the interstitial ad is closed.
+                Timber.v("adclosed");
+
+            }
+        });
+
+        mRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(this);
+        mRewardedVideoAd.setRewardedVideoAdListener(new RewardedVideoAdListener() {
+            @Override
+            public void onRewardedVideoAdLoaded() {
+                mRewardedVideoAd.show();
+                Timber.v("rewardedadvideoloaded");
+            }
+
+            @Override
+            public void onRewardedVideoAdOpened() {
+                Timber.v("rewardedadvideoadopened");
+            }
+
+            @Override
+            public void onRewardedVideoStarted() {
+                Timber.v("rewardedadvideostarted");
+            }
+
+            @Override
+            public void onRewardedVideoAdClosed() {
+                Timber.v("rewardedadvideoclosed");
+            }
+
+            @Override
+            public void onRewarded(RewardItem rewardItem) {
+                Timber.v("rewardedadvideo");
+            }
+
+            @Override
+            public void onRewardedVideoAdLeftApplication() {
+                Timber.v("rewardedadvideoonleftapplication");
+            }
+
+            @Override
+            public void onRewardedVideoAdFailedToLoad(int i) {
+                Timber.v("rewardedadvideoerrorcode" + i);
+            }
+
+            @Override
+            public void onRewardedVideoCompleted() {
+
+
+            }
+        });
+        mRewardedVideoAd.loadAd("ca-app-pub-7437193771461924/4019807734",
+                new AdRequest.Builder().build());
+
 
     }
 
@@ -411,12 +509,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 } catch (GooglePlayServicesRepairableException e) {
                     e.printStackTrace();
                     Crashlytics.logException(e);
-                    Utils.displayAlertDialog1(MainActivity.this, getText(R.string.googleplayserviceserror_java_mainactivity).toString(), getText(R.string.googleservices_wontfunctionproperly_java_mainactivity).toString() + e.getConnectionStatusCode());
+                    Utils.displayAlertDialog1(MainActivity.this, getText(R.string.googleplayserviceserror_java_mainactivity).toString(), getText(R.string.googleservices_wontfunctionproperly_java_mainactivity).toString() + " " + e.getConnectionStatusCode());
 
                 } catch (GooglePlayServicesNotAvailableException e) {
                     e.printStackTrace();
                     Crashlytics.logException(e);
-                    Utils.displayAlertDialog1(MainActivity.this, getText(R.string.googleplayserviceserror_java_mainactivity).toString(), getText(R.string.googleservicesnotavailable_java_mainactivity).toString() + e.errorCode);
+                    Utils.displayAlertDialog1(MainActivity.this, getText(R.string.googleplayserviceserror_java_mainactivity).toString(), getText(R.string.googleservicesnotavailable_java_mainactivity).toString() + " " + e.errorCode);
 
 
                 }
@@ -937,9 +1035,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
-                if(mBottomSheetBehavior1.getState() == BottomSheetBehavior.STATE_COLLAPSED)
+                if (mBottomSheetBehavior1.getState() == BottomSheetBehavior.STATE_COLLAPSED)
                     mBottomSheetBehavior1.setState(BottomSheetBehavior.STATE_HIDDEN);
-                else{
+                else {
                     mBottomSheetBehavior1.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 }
             }
@@ -1168,8 +1266,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             if (bottomSheetID != 0)
                 outState.putInt("bottomsheetid", bottomSheetID);
 
-        } catch (Exception e)
-        { e.printStackTrace();}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -1382,8 +1481,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
-
-
     public class BroadcastReceiver extends android.content.BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -1395,7 +1492,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                     SimpleDateFormat n = new SimpleDateFormat("hh:mm:ss aa , dd-MM-yyyy");
 
-                    textView_info.setText(getText(R.string.activity_java_mainactivity) + status.getActivity() + "\n" + getText(R.string.time_java_mainactivity) + n.format(status.getDatetime().getTime()) + "\n" + getText(R.string.address_java_mainactivity) + (status.getLocationaddress() == null || status.getLocationaddress().equals("null") ? getText(R.string.notfound_java_mainactivity) : status.getLocationaddress()));
+                    textView_info.setText(" " + getText(R.string.activity_java_mainactivity) + " " + status.getActivity() + "\n" + getText(R.string.time_java_mainactivity) + " " + n.format(status.getDatetime().getTime()) + "\n" + getText(R.string.address_java_mainactivity) + (status.getLocationaddress() == null || status.getLocationaddress().equals("null") ? getText(R.string.notfound_java_mainactivity) : status.getLocationaddress()));
 
 
                     updateUIafterStatus(status);

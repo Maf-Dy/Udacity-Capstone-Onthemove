@@ -19,9 +19,9 @@ android {
     signingConfigs {
         config {
             keyAlias 'key0'
-            keyPassword 'capstone_mafdy'
+            keyPassword '92mesh'
             storeFile file('../keystore_onthemove.jks')
-            storePassword 'capstone_mafdy'
+            storePassword '92mesh'
         }
     }
     compileSdkVersion 28

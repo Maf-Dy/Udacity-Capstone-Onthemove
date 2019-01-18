@@ -111,7 +111,7 @@ public class NotificationService extends Service
             CharSequence name = getText(R.string.app_name);
 
             NotificationChannel mChannel =
-                    new NotificationChannel(CHANNEL_ID, name, NotificationManager.IMPORTANCE_DEFAULT);
+                    new NotificationChannel(CHANNEL_ID, name, NotificationManager.IMPORTANCE_HIGH);
 
 
             mNotificationManager.createNotificationChannel(mChannel);
@@ -703,7 +703,7 @@ public class NotificationService extends Service
         SimpleDateFormat n = new SimpleDateFormat("hh:mm:ss aa , dd-MM-yyyy");
 
         RemoteViews views = new RemoteViews(this.getPackageName(), R.layout.new_app_widget);
-        views.setTextViewText(R.id.appwidget_text, getText(R.string.currently_java_service) + status.getActivity() + getText(R.string.time_java_service) + n.format(status.getDatetime().getTime()) + " \n" + getText(R.string.taptosharenow_java_service));
+        views.setTextViewText(R.id.appwidget_text, " " + getText(R.string.currently_java_service) + " " + status.getActivity() + " " + getText(R.string.time_java_service) + " " + n.format(status.getDatetime().getTime()) + " \n" + getText(R.string.taptosharenow_java_service));
 
 
         Intent activityIntent = new Intent(this, MainActivity.class);

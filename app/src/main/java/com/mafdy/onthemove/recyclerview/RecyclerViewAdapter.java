@@ -85,7 +85,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
 
 
-            genericViewHolder.itemTxtTitle.setText(model.getTransition() + " " + model.getActivity() + mContext.getText(R.string.at_java_adapter) + model.getLocationaddress());
+            genericViewHolder.itemTxtTitle.setText(model.getTransition() + " " + model.getActivity() + " " + mContext.getText(R.string.at_java_adapter)  + " " + model.getLocationaddress());
             genericViewHolder.itemTxtMessage.setText(new SimpleDateFormat("hh:mm:ss aa , dd-MM-yyyy").format(model.getDatetime().getTime()) + mContext.getText(R.string.accurate_to_java_adapter) + new DecimalFormat("##.###").format(model.getLocationaccuracy()) );
 
 
