@@ -45,6 +45,9 @@
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="7eb97d8e11551dff5e275a651f6fb171f6909f8d" />
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-7437193771461924~3939916689"/>
 
         <service
             android:name=".service.NotificationService"

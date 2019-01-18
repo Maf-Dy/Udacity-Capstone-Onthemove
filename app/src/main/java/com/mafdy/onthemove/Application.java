@@ -3,6 +3,7 @@ package com.mafdy.onthemove;
 import android.content.Intent;
 
 import com.facebook.stetho.Stetho;
+import com.google.android.gms.ads.MobileAds;
 import com.mafdy.onthemove.utils.Preferencemanager;
 import com.mafdy.onthemove.utils.Utils;
 
@@ -29,6 +30,8 @@ public class Application extends android.app.Application {
 
 
         }
+
+        MobileAds.initialize(this, "ca-app-pub-7437193771461924~3939916689");
 
 
     }

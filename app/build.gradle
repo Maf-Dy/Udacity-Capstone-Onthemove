@@ -73,6 +73,10 @@ dependencies {
     implementation project(':trail')
     implementation 'com.wdullaer:materialdatetimepicker:3.6.2'
     implementation 'com.github.apl-devs:appintro:v4.2.3'
+
+    implementation 'com.google.android.gms:play-services-ads:17.1.2'
+
+
 }
 
 
