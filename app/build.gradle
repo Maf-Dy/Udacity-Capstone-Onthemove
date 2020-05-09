@@ -17,12 +17,7 @@ repositories {
 
 android {
     signingConfigs {
-        config {
-            keyAlias 'key0'
-            keyPassword '92mesh'
-            storeFile file('../keystore_onthemove.jks')
-            storePassword '92mesh'
-        }
+       
     }
     compileSdkVersion 28
     defaultConfig {
