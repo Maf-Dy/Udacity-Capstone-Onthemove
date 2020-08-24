@@ -2,7 +2,7 @@ package com.mafdy.onthemove.recyclerview;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 
-import android.support.v7.widget.SwitchCompat;
+import androidx.appcompat.widget.SwitchCompat;
 
 import java.util.HashSet;
 import java.util.List;
@@ -86,7 +86,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
 
             genericViewHolder.itemTxtTitle.setText(model.getTransition() + " " + model.getActivity() + " " + mContext.getText(R.string.at_java_adapter)  + " " + model.getLocationaddress());
-            genericViewHolder.itemTxtMessage.setText(new SimpleDateFormat("hh:mm:ss aa , dd-MM-yyyy").format(model.getDatetime().getTime()) + mContext.getText(R.string.accurate_to_java_adapter) + new DecimalFormat("##.###").format(model.getLocationaccuracy()) );
+            genericViewHolder.itemTxtMessage.setText(new SimpleDateFormat("hh:mm:ss aa , dd-MM-yyyy").format(model.getDatetime().getTime()) + " " + mContext.getText(R.string.accurate_to_java_adapter) + new DecimalFormat("##.###").format(model.getLocationaccuracy()) );
 
 
             if(model.getActivity().equals("On Foot") ||

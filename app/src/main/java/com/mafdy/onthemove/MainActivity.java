@@ -4,9 +4,9 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.app.SearchManager;
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -23,18 +23,18 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import androidx.core.app.ActivityCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SimpleItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     SnapshotClient mAwarenessSnapchotClient;
 
-    public static ActivityLocationIntentService.ServiceToActivity serviceToActivity;
+   // public static ActivityLocationIntentService.ServiceToActivity serviceToActivity;
 
     private BottomSheetBehavior mBottomSheetBehavior1, mBottomSheetBehavior_share;
     LinearLayout tapactionlayout, tapaction_destination, tapaction_share;
@@ -215,7 +215,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         Fabric.with(this, new Crashlytics());
 
-        serviceToActivity = this;
+      //  serviceToActivity = this;
 
         //initializeFusedLocationClient();
 
@@ -1131,6 +1131,113 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                     else
                                         type = "Exit";
                                 }
+
+                               /* String activityRecognitionType = "";
+
+                                int activityRecognitionTypeint = handleActivityRecognition(response);
+                                if (activityRecognitionTypeint != -1) {
+                                    if (activityRecognitionTypeint == DetectedActivity.IN_VEHICLE)
+                                        activityRecognitionType = "In Vehicle";
+                                    else if (activityRecognitionTypeint == DetectedActivity.ON_BICYCLE)
+                                        activityRecognitionType = "On Bicycle";
+                                    else if (activityRecognitionTypeint == DetectedActivity.ON_FOOT)
+                                        activityRecognitionType = "On Foot";
+                                    else if (activityRecognitionTypeint == DetectedActivity.RUNNING)
+                                        activityRecognitionType = "Running";
+                                    else if (activityRecognitionTypeint == DetectedActivity.STILL)
+                                        activityRecognitionType = "Still";
+                                    else if (activityRecognitionTypeint == DetectedActivity.WALKING)
+                                        activityRecognitionType = "Walking";
+                                }
+
+                                if (activityRecognitionType.equals(activity)) {
+
+                                }*/
+
+
+                                Status s = new Status();
+                                s.setActivity(activity);
+                                s.setDatetime(Calendar.getInstance());
+                                s.setDestinationname("");
+                                s.setLatitude(c.getLatitude());
+                                s.setLongitude(c.getLongitude());
+                                s.setLocationaccuracy(c.getAccuracy());
+                                s.setTransition(type);
+
+                                updateUIafterStatus(s);
+
+                                mStatusViewModel.insert(s);
+
+                                /*startGeocoderIntentService();
+
+                                if (s.getActivity().equals("Still")) {
+                                    mLocReq.setFastestInterval(30000);
+                                    mLocReq.setInterval(60000);
+                                } else {
+                                    mLocReq.setFastestInterval(10000);
+                                    mLocReq.setInterval(20000);
+                                }*/
+
+
+                            }
+
+                        }
+                    });
+
+
+                }
+            }
+        });
+
+
+    }
+
+    @Override
+    public void getLocation2(final DetectedActivity activities, final DetectedActivityResponse response) {
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            return;
+        }
+
+
+        final Task<LocationAvailability> t2 = mFusedLocationClient.getLocationAvailability();
+        t2.addOnCompleteListener(new OnCompleteListener<LocationAvailability>() {
+            @Override
+            public void onComplete(@NonNull Task<LocationAvailability> task) {
+                if (task.getResult().isLocationAvailable()) {
+
+                    if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        return;
+                    }
+                    final Task<Location> t = mFusedLocationClient.getLastLocation();
+
+                    t.addOnCompleteListener(new OnCompleteListener<Location>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Location> task) {
+                            Location c = task.getResult();
+
+                            if (activities != null && c != null) {
+                                String activity = "";
+                                String type = "";
+
+
+
+                                    if (activities.getType() == DetectedActivity.IN_VEHICLE)
+                                        activity = "In Vehicle";
+                                    else if (activities.getType() == DetectedActivity.ON_BICYCLE)
+                                        activity = "On Bicycle";
+                                    else if (activities.getType() == DetectedActivity.ON_FOOT)
+                                        activity = "On Foot";
+                                    else if (activities.getType() == DetectedActivity.RUNNING)
+                                        activity = "Running";
+                                    else if (activities.getType() == DetectedActivity.STILL)
+                                        activity = "Still";
+                                    else if (activities.getType() == DetectedActivity.WALKING)
+                                        activity = "Walking";
+
+                                   type = "Enter";
+
 
                                /* String activityRecognitionType = "";
 

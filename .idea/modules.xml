@@ -3,7 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Capstone - On the move.iml" filepath="$PROJECT_DIR$/Capstone - On the move.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Udacity-Capstone-Onthemove.iml" filepath="$PROJECT_DIR$/.idea/modules/Udacity-Capstone-Onthemove.iml" group="Udacity-Capstone-Onthemove" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Udacity-Capstone-Onthemove-app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Udacity-Capstone-Onthemove-app.iml" group="Udacity-Capstone-Onthemove/app" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/trail/com.amalbit.trail-trail.iml" filepath="$PROJECT_DIR$/.idea/modules/trail/com.amalbit.trail-trail.iml" group="Udacity-Capstone-Onthemove/trail" />
       <module fileurl="file://$PROJECT_DIR$/trail/trail.iml" filepath="$PROJECT_DIR$/trail/trail.iml" />
     </modules>
   </component>

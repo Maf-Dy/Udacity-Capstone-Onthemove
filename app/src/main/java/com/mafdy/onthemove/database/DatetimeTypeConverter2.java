@@ -1,6 +1,6 @@
 package com.mafdy.onthemove.database;
 
-import android.arch.persistence.room.TypeConverter;
+import androidx.room.TypeConverter;
 
 import com.crashlytics.android.Crashlytics;
 

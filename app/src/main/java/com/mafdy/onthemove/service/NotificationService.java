@@ -8,7 +8,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.appwidget.AppWidgetManager;
-import android.arch.lifecycle.Observer;
+import androidx.lifecycle.Observer;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -21,11 +21,11 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.LocalBroadcastManager;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.RemoteViews;
 
@@ -58,6 +58,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
 
 import timber.log.Timber;
 
@@ -111,7 +112,7 @@ public class NotificationService extends Service
             CharSequence name = getText(R.string.app_name);
 
             NotificationChannel mChannel =
-                    new NotificationChannel(CHANNEL_ID, name, NotificationManager.IMPORTANCE_HIGH);
+                    new NotificationChannel(CHANNEL_ID, name, NotificationManager.IMPORTANCE_LOW);
 
 
             mNotificationManager.createNotificationChannel(mChannel);
@@ -128,7 +129,10 @@ public class NotificationService extends Service
         if (intent != null) {
 
             if (intent.getBooleanExtra("From_Notification", false)) {
+
+
                 mActivityRecognitionClient.removeActivityTransitionUpdates(getIntentServicePendingIntent());
+                //mActivityRecognitionClient.removeActivityUpdates(getIntentServicePendingIntent());
                 mFusedLocationClient.removeLocationUpdates(callback);
                 stopSelf();
             }
@@ -200,7 +204,7 @@ public class NotificationService extends Service
              */
 
 
-            new AsyncTask<Void, Void, Status>() {
+            AsyncTask<Void, Void, Status> asyncTask = new AsyncTask<Void, Void, Status>() {
                 @Override
                 protected com.mafdy.onthemove.database.Status doInBackground(Void... voids) {
 
@@ -255,7 +259,7 @@ public class NotificationService extends Service
                 .setContentText("Currently " + s.getActivity() + (s.getLocationaddress() == null || s.getLocationaddress().equals("null") ? "" : " at " + s.getLocationaddress()))
                 .setContentTitle("Latest Status update")
                 .setOngoing(true)
-                .setPriority(Notification.PRIORITY_HIGH)
+                .setPriority(Notification.PRIORITY_LOW)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setTicker("Currently " + s.getActivity() + " at " + s.getLocationaddress())
                 .setWhen(System.currentTimeMillis());
@@ -395,6 +399,112 @@ public class NotificationService extends Service
 
     }
 
+    @Override
+    public void getLocation2(final DetectedActivity activities, DetectedActivityResponse response, final boolean hasdestination) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            return;
+        }
+
+
+        final Task<LocationAvailability> t2 = mFusedLocationClient.getLocationAvailability();
+        t2.addOnCompleteListener(new OnCompleteListener<LocationAvailability>() {
+            @Override
+            public void onComplete(@NonNull Task<LocationAvailability> task) {
+                if (Objects.requireNonNull(task.getResult()).isLocationAvailable()) {
+
+                    if (ActivityCompat.checkSelfPermission(NotificationService.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(NotificationService.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        return;
+                    }
+                    final Task<Location> t = mFusedLocationClient.getLastLocation();
+
+                    t.addOnCompleteListener(new OnCompleteListener<Location>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Location> task) {
+                            Location c = task.getResult();
+
+                            if (activities != null && c != null) {
+                                String activity = "";
+                                String type = "";
+
+
+
+                                    if (activities.getType() == DetectedActivity.IN_VEHICLE)
+                                        activity = "In Vehicle";
+                                    else if (activities.getType() == DetectedActivity.ON_BICYCLE)
+                                        activity = "On Bicycle";
+                                    else if (activities.getType() == DetectedActivity.ON_FOOT)
+                                        activity = "On Foot";
+                                    else if (activities.getType() == DetectedActivity.RUNNING)
+                                        activity = "Running";
+                                    else if (activities.getType() == DetectedActivity.STILL)
+                                        activity = "Still";
+                                    else if (activities.getType() == DetectedActivity.WALKING)
+                                        activity = "Walking";
+
+                                        type = "Enter";
+
+
+
+
+                                final Status s = new Status();
+                                s.setActivity(activity);
+                                s.setDatetime(Calendar.getInstance());
+                                s.setDestinationname("");
+                                s.setLatitude(c.getLatitude());
+                                s.setLongitude(c.getLongitude());
+                                s.setLocationaccuracy(c.getAccuracy());
+                                s.setTransition(type);
+                                try {
+                                    if (hasdestination) {
+                                        s.setDestinationname(Preferencemanager.getPlaceName(NotificationService.this));
+                                        s.setDestinationaddress(Preferencemanager.getPlaceAddress(NotificationService.this));
+                                        s.setDestinationid(Preferencemanager.getPlaceId(NotificationService.this));
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                                //updateUIafterStatus(s); send broadcast to activity
+                                onNewStatus(s);
+
+                                if (MainActivity.mStatusViewModel != null) {
+                                    MainActivity.mStatusViewModel.insert(s);
+                                } else {
+                                    new AsyncTask<Void, Void, Void>() {
+                                        @Override
+                                        protected Void doInBackground(Void... voids) {
+
+                                            AppDatabase.getInstance(NotificationService.this).status().insertStatus(s);
+
+                                            return null;
+                                        }
+                                    }.execute();
+                                }
+
+
+                                startGeocoderIntentService();
+
+                                if (s.getActivity().equals("Still")) {
+                                    mLocReq.setFastestInterval(30000);
+                                    mLocReq.setInterval(60000);
+                                } else {
+                                    mLocReq.setFastestInterval(10000);
+                                    mLocReq.setInterval(20000);
+                                }
+
+
+                            }
+
+                        }
+                    });
+
+
+                }
+            }
+        });
+    }
+
 
     public class LocalBinder extends Binder {
         public NotificationService getService() {
@@ -498,6 +608,7 @@ public class NotificationService extends Service
 
 
         Task<Void> task = mActivityRecognitionClient.requestActivityTransitionUpdates(request, getIntentServicePendingIntent());
+      //  Task<Void> task = mActivityRecognitionClient.requestActivityUpdates(10000, getIntentServicePendingIntent());
 
         task.addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -531,12 +642,12 @@ public class NotificationService extends Service
 
     int[] detectedActivity = new int[]{
             DetectedActivity.IN_VEHICLE,
-            //DetectedActivity.ON_BICYCLE,
+            DetectedActivity.ON_BICYCLE,
             DetectedActivity.ON_FOOT,
             DetectedActivity.RUNNING,
             DetectedActivity.STILL,
-            // DetectedActivity.TILTING,
-            // DetectedActivity.UNKNOWN,
+             DetectedActivity.TILTING,
+             DetectedActivity.UNKNOWN,
             DetectedActivity.WALKING};
 
     public List<ActivityTransition> getTransitionActivityList() {
